@@ -5,4 +5,13 @@
     font-family: "Inter Tight", sans-serif;
     background-color: #fafaf8;
   }
+  h1 {
+    @apply font-bold text-gray-900 text-xl;
+  }
+}
+
+@layer components {
+  .page-nav-btn {
+    @apply flex  items-center border border-gray-200 rounded px-2 py-1 transition hover:bg-gray-100 cursor-pointer;
+  }
 }
