@@ -27,13 +27,13 @@ export default function App() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   return (
-    <section className="flex flex-col items-start justify-center min-screen mx-auto mt-15 max-w-4xl">
+    <section className="flex flex-col items-start justify-center min-screen mx-auto mt-15 max-w-4xl px-8">
       <h1 className="font-bold text-5xl text-gray-900">Post Fetcher</h1>
       <p className="text-gray-400 text-xl">
         Enter a URL to fetch and display posts
       </p>
       <div className="mt-10 border px-5 py-5 rounded-lg w-full border-gray-300 shadow-sm mb-6">
-        <h1 className="font-bold text-gray-900 text-xl">Fetch Posts</h1>
+        <h1>Fetch Posts</h1>
         <p className="text-gray-400">
           Enter the API endpoint URL to fetch posts from
         </p>
@@ -47,6 +47,7 @@ export default function App() {
             value={inputUrl}
             onChange={(e) => setInputUrl(e.target.value)}
             placeholder="https://jsonplaceholder.typicode.com/posts"
+            defaultValue={"https://jsonplaceholder.typicode.com/posts"}
           />
           <button
             onClick={handleFetch}
@@ -87,34 +88,72 @@ export default function App() {
 
       {!loading && !error && data && (
         <>
-          <div>
+          {totalPages > 1 && (
+            <div className="flex mb-3 items-center w-full justify-between">
+              <h1 className="">Post ({data.length})</h1>
+              <div className="flex gap-2 items-center justify-between">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                  className="page-nav-btn"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="size-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Previous
+                </button>
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <button
+                  className="page-nav-btn"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="size-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="">
             {currentPosts.map((post) => (
-              <div key={post.id}>
-                <h3>
-                  {post.id}. {post.title}
+              <div
+                className="border px-5 py-5 rounded-lg w-full border-gray-300 shadow-sm mb-2"
+                key={post.id}
+              >
+                <h3 className="font-bold text-gray-900 text-xl">
+                  {post.title}
                 </h3>
-                <p>{post.body}</p>
+                <p className="mb-4 text-gray-500">
+                  Post ID: {post.id} | User ID: {post.userId}
+                </p>
+                <p className="text-gray-500">{post.body}</p>
               </div>
             ))}
           </div>
-
-          {totalPages > 1 && (
-            <div>
-              <button onClick={handlePrevPage} disabled={currentPage === 1}>
-                Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
-          )}
         </>
       )}
     </section>
